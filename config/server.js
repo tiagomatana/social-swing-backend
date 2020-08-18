@@ -5,6 +5,7 @@ const app = express();
 
 consign()
     .include('app/interfaces')
+    .then('app/database')
     .then('app/routes')
     .into(app);
 

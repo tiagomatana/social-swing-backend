@@ -3,6 +3,14 @@ let jsonParser = bodyParser.json();
 
 module.exports = function (application) {
     const Response = application.app.interfaces.Response
+    const connection = application.app.database.Connection;
+
+    const db = connection.getConnection()
+    db.connect(function(err) {
+        if (err) throw new Error(err);
+
+        console.info("Connected...");
+    });
 
 
     application.post('/api/post', jsonParser, async function (req, res) {
