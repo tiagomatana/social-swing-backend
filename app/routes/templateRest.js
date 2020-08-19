@@ -2,16 +2,10 @@ let bodyParser = require('body-parser');
 let jsonParser = bodyParser.json();
 
 module.exports = function (application) {
-    const Response = application.app.interfaces.Response
-    const connection = application.app.database.Connection;
+    const Response = require("../interfaces/Response");
+    const users = require("../controllers/user.controller")
 
-    const db = connection.getConnection()
-    db.connect(function(err) {
-        if (err) throw new Error(err);
-
-        console.info("Connected...");
-    });
-
+    application.post('/create', users.create);
 
     application.post('/api/post', jsonParser, async function (req, res) {
         try {
@@ -48,4 +42,5 @@ module.exports = function (application) {
             res.status(err.code).send(err.body)
         }
     });
+
 };

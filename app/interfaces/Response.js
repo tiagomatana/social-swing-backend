@@ -1,4 +1,3 @@
-/** @namespace application.app.interfaces.Response **/
 module.exports.success = function (body) {
     let response = {};
     response.code = 200;
