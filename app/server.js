@@ -14,17 +14,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cookieParser());
 
-const db = require("./models");
+const db = require("./database");
 
 db.sequelize.sync();
 
-// consign()
-//     .include('app/interfaces')
-//     .then('app/database')
-//     .then('app/routes')
-//     .then('app/models')
-//     .into(app);
 
-require("./routes/authenticateRest")(app)
+require("./account/route/account-route")(app)
 
 module.exports = app;

@@ -11,7 +11,6 @@ const {
 var sequelize = new Sequelize(DATABASE_NAME, DATABASE_USER, DATABASE_PWD, {
     host: DATABASE_HOST,
     dialect: 'mysql',
-
     pool : {
         max: 5,
         min: 0,
@@ -20,11 +19,10 @@ var sequelize = new Sequelize(DATABASE_NAME, DATABASE_USER, DATABASE_PWD, {
 });
 
 const db = {};
-
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
-db.Users = require("./User.model")(sequelize, Sequelize);
+db.Account = require("../account/model/account.model")(sequelize, Sequelize);
 
 module.exports = db
 
