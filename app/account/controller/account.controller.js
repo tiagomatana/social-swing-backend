@@ -5,10 +5,11 @@ require('dotenv/config');
 var jwt = require('jsonwebtoken');
 const Response = require('../../interfaces/Response');
 const Enum = require('../model/account.enum')
+const Email = require('../../interfaces/Email');
 
 exports.create = (req, res) => {
     const bcrypt = require('bcrypt');
-    if (!req.body.password) {
+    if (!req.body.password || !Email.validate(req.body.email)) {
         res.send(Response.notAcceptable());
         return;
     } else {
@@ -42,6 +43,10 @@ exports.createAdmin = (req, res) => {
 };
 
 exports.authenticate = (req, res) => {
+    if (!Email.validate(req.body.email)) {
+        res.send(Response.notAcceptable(`${req.body.email} is not a email`));
+        return;
+    }
     const email = req.body.email;
     const password = req.body.password;
     const bcrypt = require('bcrypt');
