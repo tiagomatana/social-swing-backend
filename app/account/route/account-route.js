@@ -1,4 +1,3 @@
-require('dotenv/config');
 const PREFIX_URL = '/api/user'
 
 module.exports = function (application) {

@@ -1,8 +1,6 @@
 const db = require("../../database");
 const Account = db.Account;
-const Op = db.Sequelize.Op;
-require('dotenv/config');
-var jwt = require('jsonwebtoken');
+const jwt = require('jsonwebtoken');
 const Response = require('../../interfaces/Response');
 const Enum = require('../model/account.enum')
 const Email = require('../../interfaces/Email');
@@ -14,7 +12,6 @@ exports.create = (req, res) => {
         return;
     } else {
         const account = Account.build(req.body);
-
         bcrypt.hash(account.password, 12, function (err, hash){
             account.password = hash
             Account.create(account.dataValues)
