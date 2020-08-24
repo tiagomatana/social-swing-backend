@@ -7,10 +7,8 @@ const Email = require('../../interfaces/Email');
 
 exports.create = (req, res) => {
     const bcrypt = require('bcrypt');
-    if (!req.body.password || !Email.validate(req.body.email)) {
-        res.send(Response.notAcceptable());
-        return;
-    } else {
+    req.body.birthdate = new Date(req.body.birthdate);
+    if (validateData(req, res)){
         const account = Account.build(req.body);
         bcrypt.hash(account.password, 12, function (err, hash){
             account.password = hash
@@ -23,7 +21,6 @@ exports.create = (req, res) => {
                 });
         });
     }
-
 };
 
 exports.createAdmin = (req, res) => {
@@ -47,14 +44,15 @@ exports.authenticate = (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
     const bcrypt = require('bcrypt');
-    Account.findOne({ where: { email} })
-        .then(data => {
-            if (data) {
-                const userFound = data['dataValues']
+    getAccount(email)
+        .then(userFound => {
+            if (userFound) {
                 bcrypt.compare(password, userFound.password, function (err, valid){
                     if (valid){
-                        var token = jwt.sign({data}, process.env.SECRET, {
+                        const {id} = userFound
+                        var token = jwt.sign({id}, process.env.SECRET, {
                             expiresIn: 86400 // expires in 1 day
+
                         });
                         res.send({auth: true, token: token});
                     } else {
@@ -72,4 +70,47 @@ exports.authenticate = (req, res) => {
 
 exports.logout = (req, res) => {
     res.send({ auth: false, token: null });
+}
+
+async function getAccount(email) {
+    return Account.findOne({ where: { email} })
+        .then(data => {
+            if (data) {
+                const userFound = data['dataValues']
+                return userFound;
+            } else {
+                return null;
+            }
+        }).catch(err => {
+            return null;
+    });
+}
+
+function is18(birthdate) {
+    const today = new Date();
+    var years = today.getFullYear() - birthdate.getFullYear();
+    const month = today.getMonth() - birthdate.getMonth();
+
+    if (month < 0 || (month === 0 && today.getDate() < birthdate.getDate())){
+        years--;
+    }
+
+    return years >=18;
+}
+
+function validateData (req, res) {
+    if (!req.body.password || !Email.validate(req.body.email)) {
+        res.send(Response.notAcceptable());
+        return false;
+    }
+    if (!is18(req.body.birthdate)) {
+        res.send(Response.notAcceptable('years old under 18'));
+        return false;
+    }
+    getAccount(req.body.email).then(data => {
+        if (data) {
+            res.send(Response.notAcceptable('User exists'));
+            return false;
+        }
+    })
 }
