@@ -1,15 +1,15 @@
-var app = require("./app/server");
+const app = require("./app/server");
 const listEndpoints = require('express-list-endpoints');
-var cookieParser = require('cookie-parser');
+const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
-var http = require('http');
+const http = require('http');
+const Logger = require('./app/interfaces/Logger')
 
 const {PORT} = process.env;
 
-
 function endpointsList() {
     let endpoints = listEndpoints(app);
-    console.table(endpoints)
+    Logger.table(endpoints)
 }
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -18,6 +18,6 @@ app.use(cookieParser());
 
 
 var server = http.createServer(app);
-server.listen(3000);
-console.log("Servidor escutando na porta 3000...")
+server.listen(PORT || 3000);
+Logger.log("Servidor escutando na porta 3000...");
 endpointsList();

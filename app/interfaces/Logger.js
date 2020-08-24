@@ -27,3 +27,8 @@ module.exports.warn = (msg) => {
     const message = `[${dateLog}] [WARN] - ${msg}`;
     console.warn(message);
 }
+
+module.exports.table = (table) => {
+    this.log('table created.')
+    console.table(table);
+}

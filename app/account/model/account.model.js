@@ -12,13 +12,16 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.STRING,
             allowNull: false
         },
+        genre:{
+            type: Sequelize.STRING,
+            allowNull: false
+        },
         birthdate: {
             type: 'DATETIME',
             allowNull: false
         },
         username: {
             type: Sequelize.STRING,
-            allowNull: false
         },
         password: {
             type: Sequelize.STRING,

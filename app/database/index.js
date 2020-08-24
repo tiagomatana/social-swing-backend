@@ -1,5 +1,6 @@
 const Sequelize = require("sequelize");
 
+
 const {
     DATABASE_USER,
     DATABASE_PWD,
