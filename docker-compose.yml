@@ -1,0 +1,39 @@
+version: '3'
+networks:
+  brasil-swing-network:
+    driver: bridge
+services:
+  brasil-swing-db:
+    image: mysql:8
+    hostname: brasil-swing-db
+    container_name: brasil-swing-db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: brasilswing
+    ports:
+      - 3306:3306
+    networks:
+      - brasil-swing-network
+    security_opt: ['seccomp:unconfined']
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    hostname: api-brasil-swing
+    container_name: api-brasil-swing
+    environment:
+      PORT: 3000
+      MEMORY: 1024
+      DATABASE_USER: root
+      DATABASE_PWD: root
+      DATABASE_HOST: brasil-swing-db
+      DATABASE_NAME: brasilswing
+    depends_on:
+      - brasil-swing-db
+    links:
+      - brasil-swing-db
+    ports:
+      - 3000:3000
+    networks:
+      - brasil-swing-network
+

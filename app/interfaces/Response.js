@@ -1,4 +1,4 @@
-/** @namespace application.app.interfaces.Response **/
+const Logger = require('./Logger');
 module.exports.success = function (body) {
     let response = {};
     response.code = 200;
@@ -31,6 +31,7 @@ module.exports.unauthorized = function (body) {
     let err = {};
     err.code = 401;
     err.body = {data: body || {message: "Unauthorized"}};
+    Logger.error('Request unauthorized.')
     return err;
 };
 
