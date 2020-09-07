@@ -8,28 +8,9 @@ module.exports = function (app) {
     const Email = app.interfaces.Email;
     const Enum = app.interfaces.Enum;
 
-
-    function validateData(data) {
-        if (!data.password) return false;
-        return is18(data.birthdate);
-    }
-
-    function is18(birthdate) {
-        birthdate = new Date(birthdate);
-        const today = new Date();
-        let years = today.getFullYear() - birthdate.getFullYear();
-        const month = today.getMonth() - birthdate.getMonth();
-
-        if (month < 0 || (month === 0 && today.getDate() < birthdate.getDate())) {
-            years--;
-        }
-
-        return years >= 18;
-    }
-
     return {
         async create(data) {
-            if (validateData(data) && Email.validate(data.email)) {
+            if (Email.validate(data.email)) {
                 const account = data;
                 account.birthdate = new Date(data.birthdate);
                 account.password = await new Promise((resolve) => {

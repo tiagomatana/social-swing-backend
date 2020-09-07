@@ -1,3 +1,4 @@
+/** @namespace application.app.security.JWT**/
 module.exports.verifyJWT = (req, res, next) => {
     const jwt = require('jsonwebtoken');
     const Response = require('../interfaces/Response');
