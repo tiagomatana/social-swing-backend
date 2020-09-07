@@ -15,7 +15,6 @@ services:
       - 27017:27017
     networks:
       - brasil-swing-network
-    security_opt: ['seccomp:unconfined']
   app:
     build:
       context: .
@@ -25,10 +24,7 @@ services:
     environment:
       PORT: 3000
       MEMORY: 1024
-      DATABASE_USER: root
-      DATABASE_PWD: root
-      DATABASE_HOST: brasil-swing-db
-      DATABASE_NAME: brasilswing
+      DATABASE_URI: mongodb://root:brasilswing@brasil-swing-db:27017/brasilswing?authSource=admin
     depends_on:
       - brasil-swing-db
     links:

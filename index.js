@@ -22,7 +22,7 @@ function connect() {
         .on('disconnected', connect)
         .once('open', listen);
     endpointsList();
-    return mongoose.connect(uri);
+    return mongoose.connect(uri, {useNewUrlParser: true, useUnifiedTopology: true});
 }
 
 function endpointsList() {
