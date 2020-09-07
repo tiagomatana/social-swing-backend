@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 const ObjectId = Schema.ObjectId;
 
 const Account = new Schema({
-    id: {
+    _id: {
       type: ObjectId
     },
     email: {
@@ -15,16 +15,8 @@ const Account = new Schema({
         type: String,
         required: true
     },
-    surname: {
+    cpf: {
         type: String,
-        required: true
-    },
-    genre: {
-        type: String,
-        required: true
-    },
-    birthdate: {
-        type: Date,
         required: true
     },
     username: {
@@ -82,6 +74,6 @@ const Account = new Schema({
         type: Boolean,
         default: false
     }
-});
+}, { timestamps: { createdAt: 'created_at'}});
 
 mongoose.model("account", Account, "account");
