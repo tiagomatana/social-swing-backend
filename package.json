@@ -25,11 +25,7 @@
     "express-list-endpoints": "4.0.1",
     "http": "0.0.1-security",
     "jsonwebtoken": "^8.5.1",
-    "mysql": "^2.18.1",
-    "mysql2": "^2.0.2",
-    "nodemailer": "6.4.2",
-    "sequelize": "^5.21.2",
-    "sequelize-cli": "^6.2.0",
+    "mongoose": "^5.10.3",
     "supertest": "4.0.2"
   },
   "devDependencies": {

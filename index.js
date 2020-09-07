@@ -1,23 +1,35 @@
 const app = require("./app/server");
 const listEndpoints = require('express-list-endpoints');
-const cookieParser = require('cookie-parser');
-const bodyParser = require('body-parser');
-const http = require('http');
-const Logger = require('./app/interfaces/Logger')
+const mongoose = require("mongoose");
+const Logger = app.interfaces.Logger;
 
-const {PORT} = process.env;
+const {
+    DATABASE_URI,
+    PORT
+} = process.env;
+
+connect();
+
+function listen() {
+    app.listen(PORT);
+    Logger.log('Express app started on port ' + PORT);
+}
+
+function connect() {
+    const uri = DATABASE_URI;
+    mongoose.connection
+        .on('error', Logger.error)
+        .on('disconnected', connect)
+        .once('open', listen);
+    endpointsList();
+    return mongoose.connect(uri, {useNewUrlParser: true, useUnifiedTopology: true});
+}
 
 function endpointsList() {
     let endpoints = listEndpoints(app);
     Logger.table(endpoints)
 }
 
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-app.use(cookieParser());
 
 
-var server = http.createServer(app);
-server.listen(PORT || 3000);
-Logger.log("Servidor escutando na porta 3000...");
-endpointsList();
+

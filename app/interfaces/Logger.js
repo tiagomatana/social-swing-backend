@@ -1,3 +1,4 @@
+/** @namespace application.app.interfaces.Logger **/
 module.exports.error = (msg) => {
     const dateLog = new Date().toISOString();
     const message = `[${dateLog}] [ERROR] - ${msg}`;
