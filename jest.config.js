@@ -31,6 +31,7 @@ module.exports = {
     ],
     // The test environment that will be used for testing
     testEnvironment: "node",
+    testTimeout: 5000,
     // The glob patterns Jest uses to detect test files
     testMatch: [
         "**/*-spec.js",

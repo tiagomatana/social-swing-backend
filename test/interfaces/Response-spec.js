@@ -4,6 +4,13 @@ describe('Response.js Tests', function () {
     beforeEach(function () {
         app = require("../../app/interfaces/Response.js");
         assert = require('assert');
+        global.console = {
+            log: jest.fn(),
+            info: jest.fn(),
+            debug: jest.fn(),
+            error: jest.fn(),
+            warn: jest.fn()
+        }
     });
 
     it('should success response', function () {

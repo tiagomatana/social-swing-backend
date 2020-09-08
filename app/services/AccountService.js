@@ -19,6 +19,19 @@ module.exports = function (app) {
                 return Response.internalServerError(err);
             }
         },
+        async update(data) {
+            try {
+                if (!data._id) {
+                    return Response.notAcceptable();
+                } else {
+                    let template = new accountModel(data);
+                    await accountModel.updateOne({_id: template._id}, template, {upsert : false });
+                    return Response.success(true);
+                }
+            } catch (err) {
+                return Response.internalServerError(err);
+            }
+        },
         async getAccount(email , full = 0) {
             try {
                 const project = full ? {} : {password: 0}
