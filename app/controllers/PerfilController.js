@@ -7,10 +7,10 @@ module.exports = function (app) {
     const Enum = app.interfaces.Enum;
 
     function validateData(perfil) {
-        perfil.genero = Enum.GENERO.find(genero => { return genero === perfil.genero});
-        perfil.orientacao_sexual = Enum.ORIENTACAO.find(orientacao => { return orientacao === perfil.orientacao_sexual});
-        perfil.signo = Enum.SIGNO.find(signo => { return signo === perfil.signo});
-        perfil.estado_civil = Enum.SIGNO.find(estado_civil => { return estado_civil === perfil.estado_civil});
+        perfil.genero = Enum.GENERO.value.find(genero => { return genero === perfil.genero});
+        perfil.orientacao_sexual = Enum.ORIENTACAO.value.find(orientacao => { return orientacao === perfil.orientacao_sexual});
+        perfil.signo = Enum.SIGNO.value.find(signo => { return signo === perfil.signo});
+        perfil.estado_civil = Enum.SIGNO.value.find(estado_civil => { return estado_civil === perfil.estado_civil});
         return perfil;
     }
 
@@ -30,9 +30,10 @@ module.exports = function (app) {
     return {
         async create(data) {
             if (is18(data.nascimento)) {
-                const perfil = data;
+                let perfil = data;
                 perfil.nascimento = new Date(data.nascimento);
-                return perfilService.create(validateData(perfil));
+                perfil = validateData(perfil);
+                return perfilService.create(perfil);
             } else {
                 return Response.notAcceptable();
             }

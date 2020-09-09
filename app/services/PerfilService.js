@@ -19,10 +19,8 @@ module.exports = function (app) {
             try {
                 let template = new perfilModel(data);
                 let filter = {'_id': template._id}
-                let perfil = await perfilModel.findOneAndUpdate(filter, template, {
-                    new: true
-                });
-                return Response.success(perfil);
+                await perfilModel.updateOne(filter, template, {upsert : false });
+                return Response.success();
 
             } catch (err) {
                 return Response.internalServerError(err);

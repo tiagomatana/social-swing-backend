@@ -8,12 +8,12 @@ module.exports = function (app) {
 
     app.use(jsonParser);
 
-    app.post(`${PREFIX_URL}/create`, async function (req, res) {
+    app.post(`${PREFIX_URL}/create`, jsonParser, async function (req, res) {
         try {
             let result = await ctrl.create(req.body);
             res.status(result.code).send(result.body);
         } catch (err) {
-            res.status(err.code).send(err.body)
+            res.status(app.interfaces.Response.internalServerError())
         }
     });
 
@@ -22,7 +22,7 @@ module.exports = function (app) {
             let result = await ctrl.update(req.body);
             res.status(result.code).send(result.body);
         } catch (err) {
-            res.status(err.code).send(err.body)
+            res.status(app.interfaces.Response.internalServerError())
         }
     });
 }
