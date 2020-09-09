@@ -4,7 +4,9 @@
   "description": "Backend for Brasil Swing",
   "main": "index.js",
   "scripts": {
-    "test": "jest --silent"
+    "test": "jest --silent",
+    "build": "rm -rf dist && gulp compress",
+    "pipeline": "npm i --verbose && npm run test && npm run build && npm prune --production"
   },
   "repository": {
     "type": "git",
@@ -23,12 +25,13 @@
     "enum": "^3.0.4",
     "express": "4.16.4",
     "express-list-endpoints": "4.0.1",
-    "http": "0.0.1-security",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^5.10.3",
-    "supertest": "4.0.2"
+    "mongoose": "^5.10.3"
   },
   "devDependencies": {
+    "supertest": "4.0.2",
+    "gulp": "^4.0.2",
+    "gulp-minify": "^3.1.0",
     "jest": "24.9.0"
   }
 }
