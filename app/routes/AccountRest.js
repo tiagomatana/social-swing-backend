@@ -10,7 +10,7 @@ module.exports = function (app) {
             let result = await ctrl.createAdmin(req.body);
             res.status(result.code).send(result.body);
         } catch (err) {
-            res.status(err.code).send(err.body)
+            res.status(app.interfaces.Response.internalServerError())
         }
     });
 
@@ -19,7 +19,7 @@ module.exports = function (app) {
             let result = await ctrl.create(req.body);
             res.status(result.code).send(result.body);
         } catch (err) {
-            res.status(err.code).send(err.body)
+            res.status(app.interfaces.Response.internalServerError())
         }
     });
 
@@ -28,7 +28,7 @@ module.exports = function (app) {
             let result = await ctrl.authenticate(req.body);
             res.status(result.code).send(result.body);
         } catch (err) {
-            res.status(err.code).send(err.body)
+            res.status(app.interfaces.Response.internalServerError())
         }
     });
 
@@ -37,7 +37,7 @@ module.exports = function (app) {
             let result = await ctrl.logout();
             res.status(result.code).send(result.body);
         } catch (err) {
-            res.status(err.code).send(err.body)
+            res.status(app.interfaces.Response.internalServerError())
         }
     });
 }

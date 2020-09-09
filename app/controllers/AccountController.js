@@ -8,51 +8,25 @@ module.exports = function (app) {
     const Email = app.interfaces.Email;
     const Enum = app.interfaces.Enum;
 
-
-    function validateData(data) {
-        if (!data.password) return false;
-        return is18(data.birthdate);
-    }
-
-    function is18(birthdate) {
-        birthdate = new Date(birthdate);
-        const today = new Date();
-        let years = today.getFullYear() - birthdate.getFullYear();
-        const month = today.getMonth() - birthdate.getMonth();
-
-        if (month < 0 || (month === 0 && today.getDate() < birthdate.getDate())) {
-            years--;
-        }
-
-        return years >= 18;
-    }
-
     return {
         async create(data) {
-            if (validateData(data) && Email.validate(data.email)) {
-                const account = data;
-                account.birthdate = new Date(data.birthdate);
-                account.password = await new Promise((resolve) => {
-                    bcrypt.hash(account.password, 12, function (err, hash) {
-                        resolve(hash);
-                    });
-                });
-                return accountService.create(account);
+            if (Email.validate(data.email)) {
+                let salt = bcrypt.genSaltSync(10);
+                data.password = bcrypt.hashSync(data.password, salt)
+                return accountService.create(data);
             } else {
                 return Response.notAcceptable();
             }
         },
         async createAdmin(data) {
-            return new Promise(async (resolve) => {
-                if (data.secret !== process.env.SECRET) {
-                    resolve(Response.notAcceptable());
-                } else {
-                    delete data.secret;
-                    data.nivel = Enum.ADMINISTRATOR.value;
-                    data.is_administrador = true;
-                    resolve(this.create(data));
-                }
-            });
+            if (data.secret !== process.env.SECRET) {
+                return Response.notAcceptable();
+            } else {
+                delete data.secret;
+                data.nivel = Enum.ADMINISTRATOR.value;
+                data.is_administrador = true;
+                return await this.create(data);
+            }
         },
         async authenticate(user) {
             if (!Email.validate(user.email)) {
@@ -63,22 +37,18 @@ module.exports = function (app) {
                 return Response.unauthorized();
             }
             const pass = user.password;
-            const auth = await new Promise((resolve) => {
-                bcrypt.compare(pass, userFound.password, (err, valid) => {
-                    if (valid) {
-                        const {id} = userFound
-                        let token = jwt.sign({id}, process.env.SECRET, {
-                            expiresIn: 86400 // expires in 1 day
-                        });
-                        delete userFound.password;
-                        userFound.token = token
-                        resolve(Response.success({auth: true, user: userFound}));
-                    } else {
-                        resolve(Response.unauthorized());
-                    }
+            let valid = bcrypt.compareSync(pass, userFound.password);
+            if (valid) {
+                const {_id} = userFound
+                let token = jwt.sign({_id}, process.env.SECRET, {
+                    expiresIn: 86400 // expires in 1 day
                 });
-            });
-            return auth;
+                delete userFound.password;
+                userFound.token = token
+                return Response.success({auth: true, user: userFound});
+            } else {
+                return Response.unauthorized();
+            }
         },
         async logout() {
             return Response.success({auth: false, token: null});
