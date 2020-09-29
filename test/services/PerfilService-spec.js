@@ -5,6 +5,12 @@ describe('PerfilService.js Tests', function () {
     let PerfilService, Mock = {};
     let ResponseService = require("../../app/interfaces/Response");
 
+    afterAll(async done => {
+        // Closing the DB connection allows Jest to exit successfully.
+        // await mongoose.connection.close()
+        done()
+    })
+
     beforeEach(function () {
         mock();
         let app = {

@@ -6,6 +6,12 @@ describe('PerfilRest.js Tests', () => {
 
     let token;
 
+    afterAll(async done => {
+        // Closing the DB connection allows Jest to exit successfully.
+        // await mongoose.connection.close()
+        done()
+    })
+
     beforeAll((done) => {
         jest.spyOn(jwt, 'verify').mockImplementation(() => {
             return Promise.resolve(69);

@@ -4,7 +4,7 @@
   "description": "Backend for Brasil Swing",
   "main": "index.js",
   "scripts": {
-    "test": "jest --silent",
+    "test": "jest --forceExit",
     "build": "rm -rf dist && gulp compress",
     "start": "node --max-old-space-size=$MEMORY --optimize-for-size index.js",
     "pipeline": "npm i --verbose && npm run test && npm run build && npm prune --production"

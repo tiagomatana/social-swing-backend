@@ -16,6 +16,12 @@ describe('PerfilController.js Tests', function () {
 
     });
 
+    afterAll(async done => {
+        // Closing the DB connection allows Jest to exit successfully.
+        // await mongoose.connection.close()
+        done()
+    })
+
     beforeAll((done /* call it or remove it*/) => {
         done(); // calling it
     });

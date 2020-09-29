@@ -3,6 +3,13 @@ const request = require('supertest');
 const server = require('../../app/server');
 
 describe('AccountRest.js Tests', () => {
+
+    afterAll(async done => {
+        // Closing the DB connection allows Jest to exit successfully.
+        // await mongoose.connection.close()
+        done()
+    })
+
     test('/api/user/admin', async () => {
         jest.spyOn(server.controllers.AccountController, "createAdmin").mockImplementation(()=>{
             return Promise.resolve({code:200,body:{}})

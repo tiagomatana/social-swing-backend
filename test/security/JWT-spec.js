@@ -12,6 +12,12 @@ describe('JWT.js Test', function (){
         }
     }
 
+    afterAll(async done => {
+        // Closing the DB connection allows Jest to exit successfully.
+        // await mongoose.connection.close()
+        done()
+    })
+
     beforeEach(function (){
 
     });

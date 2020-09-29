@@ -5,6 +5,12 @@ describe('AccountService.js Tests', function () {
     let AccountService;
     let ResponseService = require("../../app/interfaces/Response");
 
+    afterAll(async done => {
+        // Closing the DB connection allows Jest to exit successfully.
+        // await mongoose.connection.close()
+        done()
+    })
+
     beforeEach(function () {
         let app = {
             interfaces: {
