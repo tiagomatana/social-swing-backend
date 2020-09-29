@@ -6,6 +6,7 @@
   "scripts": {
     "test": "jest --silent",
     "build": "rm -rf dist && gulp compress",
+    "start": "node index.js",
     "pipeline": "npm i --verbose && npm run test && npm run build && npm prune --production"
   },
   "repository": {
