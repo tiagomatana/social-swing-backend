@@ -27,7 +27,7 @@ jobs:
     - run: npm run pipeline
     - run: npm run reporter
     - run: jest --json --outputFile=result.json --testLocationInResults
-      uses: tanmen/jest-reporter@v1.1
+    - uses: tanmen/jest-reporter@v1.1
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
 
