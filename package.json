@@ -6,7 +6,7 @@
   "scripts": {
     "test": "jest --silent",
     "build": "rm -rf dist && gulp compress",
-    "start": "node index.js",
+    "start": "node --max-old-space-size=$MEMORY --optimize-for-size index.js",
     "pipeline": "npm i --verbose && npm run test && npm run build && npm prune --production"
   },
   "repository": {
