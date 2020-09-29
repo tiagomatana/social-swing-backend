@@ -12,6 +12,7 @@ module.exports = function (app) {
                     return Response.notAcceptable();
                 } else {
                     let account = new accountModel(data);
+
                     await account.save();
                     return Response.success(account._id);
                 }

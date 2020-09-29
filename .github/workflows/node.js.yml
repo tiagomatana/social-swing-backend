@@ -24,7 +24,10 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - run: npm i --verbose
-    - run: npm run build
-    - run: npm run test
-    - run: npm prune --production
+    - run: npm run pipeline
+    - run: npm run reporter
+    - name: Jest Reporter
+      user: tanmen/jest-reporter@v1.1
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+

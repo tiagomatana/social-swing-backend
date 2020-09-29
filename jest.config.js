@@ -21,7 +21,8 @@ module.exports = {
     // A list of reporter names that Jest uses when writing coverage reports
     coverageReporters: [
         "html",
-        "text"
+        "text",
+        "json"
     ],
     // Make calling deprecated APIs throw helpful error messages
     errorOnDeprecated: true,

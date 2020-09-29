@@ -4,14 +4,15 @@ const Schema = mongoose.Schema;
 const ObjectId = Schema.ObjectId;
 
 const Account = new Schema({
-    _id: {
-      type: ObjectId
-    },
     email: {
         type: String,
         required: true
     },
     name: {
+        type: String,
+        required: true
+    },
+    surname: {
         type: String,
         required: true
     },
