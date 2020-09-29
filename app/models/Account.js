@@ -15,62 +15,30 @@ const Account = new Schema({
         type: String,
         required: true
     },
-    cpf: {
+    birthdate: {
+        type: Date,
+        required: true
+    },
+    password: {
         type: String,
         required: true
     },
-    username: {
-        type: String,
-    },
-    password: {
+    genre: {
         type: String,
         required: true
     },
     last_login: {
         type: Date
     },
-    iugu_client_id: {
-        type: String
-    },
-    nivel: {
-        type: String,
-        default: 'usuario'
-    },
     active: {
         type: Boolean,
         default: true
     },
-    is_administrador: {
+    is_administrator: {
         type: Boolean,
         default: false
     },
-    foto: {
-        type: String
-    },
-    capa: {
-        type: String
-    },
-    costumo_estar_online: {
-        type: String
-    },
-    verificacao: {
-        type: String
-    },
-    verificacao_confirmacao: {
-        type: String
-    },
-    status: {
-        type: String,
-        default: 'ativo'
-    },
-    sobre: {
-        type: String
-    },
-    bloquear: {
-        type: Boolean,
-        default: false
-    },
-    excluir: {
+    is_blocked: {
         type: Boolean,
         default: false
     }

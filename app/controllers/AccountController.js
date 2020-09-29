@@ -28,6 +28,10 @@ module.exports = function (app) {
                 return await this.create(data);
             }
         },
+        async update(user){
+            return accountService.update(user);
+        },
+
         async authenticate(user) {
             if (!Email.validate(user.email)) {
                 return Response.notAcceptable(`${user.email} is not a email`);
@@ -43,9 +47,9 @@ module.exports = function (app) {
                 let token = jwt.sign({_id}, process.env.SECRET, {
                     expiresIn: 86400 // expires in 1 day
                 });
-                delete userFound.password;
-                userFound.token = token
-                return Response.success({auth: true, user: userFound});
+                userFound.last_login = Date.now();
+                await this.update(userFound);
+                return Response.success({auth: true, token: token});
             } else {
                 return Response.unauthorized();
             }
