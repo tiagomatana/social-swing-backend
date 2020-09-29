@@ -89,8 +89,10 @@ describe('AccountController.js Tests', function () {
 
     test('authenticate success', async (done) => {
         mock()
+        process.env.SECRET = 'test'
         Mock.result.password = bcrypt.hashSync(Mock.data.password,bcrypt.genSaltSync(10));
         jest.spyOn(ResponseService, "success");
+        jest.spyOn(AccountService, "update").mockImplementation(() => {return Mock.result});
         jest.spyOn(AccountService, "getAccount").mockImplementation(() => {return Mock.result});
         let result = await AccountController.authenticate(Mock.data);
         expect(ResponseService.success).toBeCalled();
