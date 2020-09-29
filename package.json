@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest --forceExit",
-    "reporter": "jest --json --outputFile=result.json --testLocationInResults",
+    "reporter": "jest --json --outputFile=result.json --testLocationInResults --forceExit",
     "build": "rm -rf dist && gulp compress",
     "start": "node --max-old-space-size=$MEMORY --optimize-for-size index.js",
     "pipeline": "npm i --verbose && npm run test && npm run build && npm prune --production"
