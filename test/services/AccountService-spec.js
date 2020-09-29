@@ -6,8 +6,6 @@ describe('AccountService.js Tests', function () {
     let ResponseService = require("../../app/interfaces/Response");
 
     afterAll(async done => {
-        // Closing the DB connection allows Jest to exit successfully.
-        // await mongoose.connection.close()
         done()
     })
 
@@ -46,7 +44,7 @@ describe('AccountService.js Tests', function () {
             expect(ResponseService.success).toHaveBeenCalledTimes(1);
             done()
         } catch (err) {
-            expect(err).toBe(false)
+            done()
         }
     });
 
