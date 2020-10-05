@@ -35,7 +35,7 @@ module.exports = function (app) {
         },
         async getAccount(email , full = 0) {
             try {
-                const project = full ? {} : {password: 0}
+                const project = {password: 0}
                 let result = await accountModel.findOne({email}, project);
                 if (result) {
                     return result.toBSON();

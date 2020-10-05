@@ -1,6 +1,11 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const bodyRecovery = "<h2>Recuperação de acesso</h2><p>Senha temporária: <strong>password</strong></p><h3>O que devo fazer agora?</h3><p>Acesse a plataforma com a senha temporária e altere sua senha o quanto antes.</p>"
+const fs = require('fs');
+const path = process.env.TEMPLATES
+let bodyRecovery;
+fs.readFile(path + "recovery.html", function (err, data) {
+    bodyRecovery = data.toString();
+})
 
 
 /** @namespace application.app.controllers.AccountController**/
@@ -33,6 +38,15 @@ module.exports = function (app) {
         },
         async update(user){
             return accountService.update(user);
+        },
+        async getUser(email){
+
+            try {
+                const user = await accountService.getAccount(email);
+                return Response.success(user);
+            } catch (e) {
+                return e;
+            }
         },
         async recoveryPass(user){
             try {
