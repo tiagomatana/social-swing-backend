@@ -1,5 +1,7 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const bodyRecovery = "<h2>Recuperação de acesso</h2><p>Senha temporária: <strong>password</strong></p><h3>O que devo fazer agora?</h3><p>Acesse a plataforma com a senha temporária e altere sua senha o quanto antes.</p>"
+
 
 /** @namespace application.app.controllers.AccountController**/
 module.exports = function (app) {
@@ -7,11 +9,12 @@ module.exports = function (app) {
     const Response = app.interfaces.Response;
     const Email = app.interfaces.Email;
     const Enum = app.interfaces.Enum;
+    const email = app.services.EmailService;
+    const salt = bcrypt.genSaltSync(10);
 
     return {
         async create(data) {
             if (Email.validate(data.email)) {
-                let salt = bcrypt.genSaltSync(10);
                 data.password = bcrypt.hashSync(data.password, salt)
                 return accountService.create(data);
             } else {
@@ -30,6 +33,26 @@ module.exports = function (app) {
         },
         async update(user){
             return accountService.update(user);
+        },
+        async recoveryPass(user){
+            try {
+                const userFound = await accountService.getAccount(user.email, 1);
+                if (userFound) {
+                    let pass = Math.random().toString(36).slice(-10)
+                    userFound.password = bcrypt.hashSync(pass, salt);
+                    await this.update(userFound);
+                    let data = {
+                        email: userFound.email,
+                        subject: '[RECUPERAR SENHA]',
+                        body: bodyRecovery.replace(/password/, pass)
+                    }
+                    email.send(data);
+                }
+                return Response.success();
+
+            } catch (err) {
+                return Response.internalServerError(err);
+            }
         },
 
         async authenticate(user) {

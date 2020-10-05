@@ -15,8 +15,9 @@ const {
 connect();
 
 function listen() {
-    app.listen(PORT || 3000);
-    Logger.log('Express app started on port ' + PORT);
+    let _port = PORT || 3000
+    app.listen(_port);
+    Logger.log('Express app started on port ' + _port);
 }
 
 function connect() {

@@ -5,6 +5,15 @@ const jsonParser = bodyParser.json();
 module.exports = function (app) {
     const ctrl = app.controllers.AccountController;
 
+    app.post(`${PREFIX_URL}/recovery`, jsonParser, async function (req, res) {
+       try {
+           let result = await ctrl.recoveryPass(req.body);
+           res.status(result.code).send(result.body);
+       } catch (err) {
+           res.send(err)
+       }
+    });
+
     app.post(`${PREFIX_URL}/admin`, jsonParser, async function (req, res) {
         try {
             let result = await ctrl.createAdmin(req.body);
