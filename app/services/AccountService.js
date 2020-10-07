@@ -35,13 +35,38 @@ module.exports = function (app) {
         },
         async getAccount(email , full = 0) {
             try {
-                const project = {password: 0}
-                let result = await accountModel.findOne({email}, project);
+                let result = await accountModel.findOne({email});
                 if (result) {
                     return result.toBSON();
                 } else {
                     return null;
                 }
+            } catch (err) {
+                return Response.internalServerError(err);
+            }
+        },
+        async disable(email){
+          try {
+              let result = await accountModel.updateOne({email}, {active: false});
+              if (result){
+                  return Response.success(result);
+              } else {
+                  return Response.notAcceptable(result)
+              }
+          } catch (err) {
+              return Response.internalServerError(err);
+          }
+        },
+        async deleteAccount(_id) {
+            try {
+                await accountModel.deleteOne({_id}, function (err) {
+                    if (err) {
+                        return false;
+                    } else {
+                        return true;
+                    }
+                });
+                return true;
             } catch (err) {
                 return Response.internalServerError(err);
             }

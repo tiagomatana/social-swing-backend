@@ -4,13 +4,16 @@ const fs = require('fs');
 const path = process.env.TEMPLATES
 let bodyRecovery;
 fs.readFile(path + "recovery.html", function (err, data) {
-    bodyRecovery = data.toString();
+    if (data) {
+        bodyRecovery = data.toString();
+    }
 })
 
 
 /** @namespace application.app.controllers.AccountController**/
 module.exports = function (app) {
     const accountService = app.services.AccountService;
+    const profileService = app.services.ProfileService;
     const Response = app.interfaces.Response;
     const Email = app.interfaces.Email;
     const Enum = app.interfaces.Enum;
@@ -40,7 +43,6 @@ module.exports = function (app) {
             return accountService.update(user);
         },
         async getUser(email){
-
             try {
                 const user = await accountService.getAccount(email);
                 return Response.success(user);
@@ -76,13 +78,19 @@ module.exports = function (app) {
             const userFound = await accountService.getAccount(user.email, 1);
             if (!userFound) {
                 return Response.unauthorized();
+            } else if(userFound.is_blocked) {
+                return Response.unauthorized();
+            }
+            if (!userFound.active) {
+                userFound.active = true;
+                await this.update(userFound)
             }
             const pass = user.password;
             let valid = bcrypt.compareSync(pass, userFound.password);
             if (valid) {
                 const {_id} = userFound
                 let token = jwt.sign({_id}, process.env.SECRET, {
-                    expiresIn: 86400 // expires in 1 day
+                    expiresIn: 43200 // expires in 12 hours
                 });
                 userFound.last_login = Date.now();
                 await this.update(userFound);
@@ -93,6 +101,20 @@ module.exports = function (app) {
         },
         async logout() {
             return Response.success({auth: false, token: null});
+        },
+        async disable(email) {
+            return accountService.disable(email);
+        },
+        async deleteAccount(id) {
+            let result = await accountService.deleteAccount(id);
+            if (result) {
+                //todo: implementar toda remoção
+                // profileService.deleteProfile(id)
+                return Response.success(id);
+            } else {
+                return Response.notAcceptable(id)
+            }
+
         }
     }
 }

@@ -1,12 +1,12 @@
-describe('PerfilController.js Tests', function () {
-    let PerfilController;
+describe('ProfileController.js Tests', function () {
+    let ProfileController;
     let Mock = {};
 
     let ResponseService = require("../../app/interfaces/Response");
     let Email = require("../../app/interfaces/Email");
     let Enum = require("../../app/interfaces/Enum");
 
-    let PerfilService = require("../../app/services/PerfilService")({
+    let ProfileService = require("../../app/services/ProfileService")({
 
         interfaces: {
             Response: ResponseService,
@@ -39,7 +39,7 @@ describe('PerfilController.js Tests', function () {
         }
         let app = {
             services: {
-                PerfilService: PerfilService
+                ProfileService: ProfileService
             },
             interfaces: {
                 Response: ResponseService,
@@ -47,43 +47,43 @@ describe('PerfilController.js Tests', function () {
                 Enum: Enum
             }
         };
-        PerfilController = require("../../app/controllers/PerfilController")(app);
+        ProfileController = require("../../app/controllers/ProfileController")(app);
     });
 
     test('create success', (done) => {
-        jest.spyOn(PerfilService, "create");
-        let result = PerfilController.create(Mock.data);
+        jest.spyOn(ProfileService, "create");
+        let result = ProfileController.create(Mock.data);
         expect(result).toEqual(Promise.resolve({}));
-        expect(PerfilService.create).toBeCalledWith(Mock.data);
+        expect(ProfileService.create).toBeCalledWith(Mock.data);
         done();
     });
 
     test('create notAcceptable', (done) => {
-        jest.spyOn(PerfilService, "create");
+        jest.spyOn(ProfileService, "create");
         jest.spyOn(ResponseService, "notAcceptable");
         Mock.data.nascimento = new Date().toISOString();
-        let result = PerfilController.create(Mock.data);
+        let result = ProfileController.create(Mock.data);
         expect(result).toEqual(Promise.resolve({}));
-        expect(PerfilService.create).not.toBeCalledWith(Mock.data);
+        expect(ProfileService.create).not.toBeCalledWith(Mock.data);
         expect(ResponseService.notAcceptable).toBeCalledTimes(1);
         done();
     });
 
     test('update success', (done) => {
-        jest.spyOn(PerfilService, "update");
-        let result = PerfilController.update(Mock.data);
+        jest.spyOn(ProfileService, "update");
+        let result = ProfileController.update(Mock.data);
         expect(result).toEqual(Promise.resolve({}));
-        expect(PerfilService.update).toBeCalledWith(Mock.data);
+        expect(ProfileService.update).toBeCalledWith(Mock.data);
         done();
     });
 
     test('update notAcceptable', (done) => {
-        jest.spyOn(PerfilService, "update");
+        jest.spyOn(ProfileService, "update");
         jest.spyOn(ResponseService, "notAcceptable");
         Mock.data.nascimento = new Date().toISOString();
-        let result = PerfilController.update(Mock.data);
+        let result = ProfileController.update(Mock.data);
         expect(result).toEqual(Promise.resolve({}));
-        expect(PerfilService.update).not.toBeCalledWith(Mock.data);
+        expect(ProfileService.update).not.toBeCalledWith(Mock.data);
         expect(ResponseService.notAcceptable).toBeCalledTimes(1);
         done();
     });

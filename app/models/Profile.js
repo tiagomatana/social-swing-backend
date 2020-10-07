@@ -1,8 +1,8 @@
-/** @namespace application.app.models.Perfil**/
+/** @namespace application.app.models.Profile**/
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const Perfil = new Schema({
+const Profile = new Schema({
     orientacao_sexual: {
         type: String
     },
@@ -17,4 +17,4 @@ const Perfil = new Schema({
     }
 }, { timestamps: { createdAt: 'created_at'}});
 
-mongoose.model("perfil", Perfil, "perfil");
+mongoose.model("profile", Profile, "profile");

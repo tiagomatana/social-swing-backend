@@ -2,12 +2,6 @@ const app = require("./app/server");
 const listEndpoints = require('express-list-endpoints');
 const mongoose = require("mongoose");
 const Logger = app.interfaces.Logger;
-const bodyParser = require('body-parser');
-
-
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-
 
 const {
     DATABASE_URI,
