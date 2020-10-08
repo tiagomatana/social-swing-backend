@@ -89,20 +89,18 @@ module.exports = function (app) {
         }
     });
 
-    app.delete(`${PREFIX_URL}/:id`, security.verifyJWT, async function (req, res) {
+    app.delete(`${PREFIX_URL}`, security.verifyJWT, async function (req, res) {
         try {
-            //TODO: implementar
-            // let result = await ctrl.logout();
+            let result = await ctrl.deleteAccount(req.user._id);
             res.status(result.code).send(result.body);
         } catch (err) {
             res.status(app.interfaces.Response.internalServerError())
         }
     });
 
-    app.put(`${PREFIX_URL}/disable/:id`, security.verifyJWT, async function (req, res) {
+    app.put(`${PREFIX_URL}/disable/`, security.verifyJWT, async function (req, res) {
         try {
-            // todo: implementar req.user._id
-            // let result = await ctrl.logout();
+            let result = await ctrl.disable(req.user._id);
             res.status(result.code).send(result.body);
         } catch (err) {
             res.status(app.interfaces.Response.internalServerError())

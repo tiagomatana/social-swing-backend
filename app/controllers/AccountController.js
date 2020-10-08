@@ -108,8 +108,7 @@ module.exports = function (app) {
         async deleteAccount(id) {
             let result = await accountService.deleteAccount(id);
             if (result) {
-                //todo: implementar toda remoção
-                // profileService.deleteProfile(id)
+                await profileService.remove(id)
                 return Response.success(id);
             } else {
                 return Response.notAcceptable(id)

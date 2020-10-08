@@ -66,7 +66,7 @@ module.exports = function (app) {
                         return true;
                     }
                 });
-                return true;
+                // return true;
             } catch (err) {
                 return Response.internalServerError(err);
             }

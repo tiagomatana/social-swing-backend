@@ -30,6 +30,7 @@ module.exports = function (app) {
 
     app.post(`${PREFIX_URL}/create`, security.verifyJWT, async function (req, res) {
         try {
+            req.body._id = req.user._id;
             let result = await ctrl.create(req.body);
             res.status(result.code).send(result.body);
         } catch (err) {
@@ -40,6 +41,15 @@ module.exports = function (app) {
     app.put(`${PREFIX_URL}/update`, security.verifyJWT, async function (req, res) {
         try {
             let result = await ctrl.update(req.body);
+            res.status(result.code).send(result.body);
+        } catch (err) {
+            res.status(app.interfaces.Response.internalServerError())
+        }
+    });
+
+    app.post(`${PREFIX_URL}/list`, security.verifyJWT, async function (req, res) {
+        try {
+            let result = await ctrl.list(req.body, req.user._id);
             res.status(result.code).send(result.body);
         } catch (err) {
             res.status(app.interfaces.Response.internalServerError())

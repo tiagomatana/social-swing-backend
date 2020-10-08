@@ -25,6 +25,38 @@ module.exports = function (app) {
             } catch (err) {
                 return Response.internalServerError(err);
             }
+        },
+        async list(options, id){
+            try {
+                let aggregate = await profileModel.aggregate([
+                    {
+                        $match: {
+                            $and: [{$ne: ["_id", id]}, {$eq: ['active', true]} ]
+                        }
+                    },
+                    {
+                        $lookup: {
+                            from: 'Account',
+                            localField: '_id',
+                            foreignField: '_id',
+                            as: 'account'
+                        }
+                    }
+                ]);
+                let result = await profileModel.aggregatePaginate(aggregate, options);
+                return Response.success(result);
+            } catch (err) {
+                return Response.internalServerError(err);
+            }
+
+        },
+        async remove(_id) {
+            try {
+                await profileModel.deleteOne({_id});
+                return Response.success();
+            } catch (err) {
+                return Response.internalServerError(err);
+            }
         }
     }
 
