@@ -1,10 +1,11 @@
 const PREFIX_URL = '/api/user'
 const bodyParser = require('body-parser');
-const cors = require('cors')
+const cors = require('cors');
 
 module.exports = function (app) {
     const ctrl = app.controllers.AccountController;
     const security = app.security.JWT;
+    const Response = app.interfaces.Response;
 
     app.use(bodyParser.urlencoded({ extended: true }));
     app.use(bodyParser.json());
@@ -27,6 +28,11 @@ module.exports = function (app) {
 
         // Pass to next layer of middleware
         next();
+    });
+
+    app.get('/', security.verifyJWT, async function (req, res) {
+        let result = Response.success(req.user._id);
+        res.status(result.code).send(result.body);
     });
 
     app.post(`${PREFIX_URL}/recovery`, async function (req, res) {
