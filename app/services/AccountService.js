@@ -33,9 +33,21 @@ module.exports = function (app) {
                 return Response.internalServerError(err);
             }
         },
-        async getAccount(email , full = 0) {
+        async getAccount(email) {
             try {
                 let result = await accountModel.findOne({email});
+                if (result) {
+                    return result.toBSON();
+                } else {
+                    return null;
+                }
+            } catch (err) {
+                return Response.internalServerError(err);
+            }
+        },
+        async verify(_id) {
+            try {
+                let result = await accountModel.findOne({_id}, {email: 1});
                 if (result) {
                     return result.toBSON();
                 } else {

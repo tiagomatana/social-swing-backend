@@ -105,6 +105,9 @@ module.exports = function (app) {
         async disable(email) {
             return accountService.disable(email);
         },
+        async verify(id) {
+            return accountService.verify(id);
+        },
         async deleteAccount(id) {
             let result = await accountService.deleteAccount(id);
             if (result) {

@@ -51,6 +51,22 @@ module.exports = function (app) {
         } catch (err) {
             res.send(err)
         }
+    });
+
+    app.get(`${PREFIX_URL}/validate/:token`, async function (req, res) {
+        try {
+            let id = await security.getUserId(req.params.token);
+            let user = await ctrl.verify(id);
+            if (user._id.toString() === id) {
+                let path = process.env.TEMPLATES;
+                res.sendFile(`${path}/email-verified.html`);
+            } else {
+                res.send('Error')
+            }
+
+        } catch (e) {
+            res.send('Error')
+        }
     })
 
     app.post(`${PREFIX_URL}/admin`, async function (req, res) {
@@ -58,7 +74,7 @@ module.exports = function (app) {
             let result = await ctrl.createAdmin(req.body);
             res.status(result.code).send(result.body);
         } catch (err) {
-            res.status(app.interfaces.Response.internalServerError())
+            res.send(app.interfaces.Response.internalServerError())
         }
     });
 
@@ -67,7 +83,7 @@ module.exports = function (app) {
             let result = await ctrl.create(req.body);
             res.status(result.code).send(result.body);
         } catch (err) {
-            res.status(app.interfaces.Response.internalServerError())
+            res.send(app.interfaces.Response.internalServerError())
         }
     });
 
@@ -98,7 +114,7 @@ module.exports = function (app) {
         }
     });
 
-    app.put(`${PREFIX_URL}/disable/`, security.verifyJWT, async function (req, res) {
+    app.put(`${PREFIX_URL}/disable`, security.verifyJWT, async function (req, res) {
         try {
             let result = await ctrl.disable(req.user._id);
             res.status(result.code).send(result.body);
