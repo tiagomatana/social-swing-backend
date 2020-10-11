@@ -80,7 +80,7 @@ module.exports = function (app) {
 
     app.post(`${PREFIX_URL}/create`, async function (req, res) {
         try {
-            let result = await ctrl.create(req.body);
+            let result = await ctrl.create(req.body, req.headers.host);
             res.status(result.code).send(result.body);
         } catch (err) {
             res.send(app.interfaces.Response.internalServerError())

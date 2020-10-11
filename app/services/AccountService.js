@@ -7,14 +7,14 @@ module.exports = function (app) {
     return {
         async create(data) {
             try {
-                const accountFound = await this.getAccount(data.email);
+                const accountFound = await this.getAccount({email: data.email});
                 if (accountFound) {
                     return Response.notAcceptable();
                 } else {
                     let account = new accountModel(data);
 
                     await account.save();
-                    return Response.success(account._id);
+                    return account.toBSON();
                 }
             } catch (err) {
                 return Response.internalServerError(err);
@@ -33,21 +33,9 @@ module.exports = function (app) {
                 return Response.internalServerError(err);
             }
         },
-        async getAccount(email) {
+        async getAccount(filter) {
             try {
-                let result = await accountModel.findOne({email});
-                if (result) {
-                    return result.toBSON();
-                } else {
-                    return null;
-                }
-            } catch (err) {
-                return Response.internalServerError(err);
-            }
-        },
-        async verify(_id) {
-            try {
-                let result = await accountModel.findOne({_id}, {email: 1});
+                let result = await accountModel.findOne(filter);
                 if (result) {
                     return result.toBSON();
                 } else {
@@ -78,7 +66,6 @@ module.exports = function (app) {
                         return true;
                     }
                 });
-                // return true;
             } catch (err) {
                 return Response.internalServerError(err);
             }

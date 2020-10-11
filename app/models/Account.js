@@ -33,7 +33,7 @@ const Account = new Schema({
     },
     active: {
         type: Boolean,
-        default: true
+        default: false
     },
     is_administrator: {
         type: Boolean,
