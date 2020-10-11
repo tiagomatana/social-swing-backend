@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
-const PerfilModel = mongoose.model('perfil');
+const ProfileModel = mongoose.model('profile');
 
-describe('PerfilService.js Tests', function () {
-    let PerfilService, Mock = {};
+describe('ProfileService.js Tests', function () {
+    let ProfileService, Mock = {};
     let ResponseService = require("../../app/interfaces/Response");
 
     afterAll(async done => {
@@ -18,21 +18,21 @@ describe('PerfilService.js Tests', function () {
                 Response: ResponseService
             }
         };
-        PerfilService = require("../../app/services/PerfilService")(app);
+        ProfileService = require("../../app/services/ProfileService")(app);
     });
 
     test('create success', async (done) => {
         jest.setTimeout(30000);
         mock();
         try {
-            jest.spyOn(PerfilModel.prototype, "save").mockImplementation(() => {
+            jest.spyOn(ProfileModel.prototype, "save").mockImplementation(() => {
                 return Promise.resolve(Mock.data);
                 done();
             });
             jest.spyOn(ResponseService, 'success');
 
-            let result = await PerfilService.create(Mock.data);
-            expect(PerfilModel.prototype.save).toBeCalled()
+            let result = await ProfileService.create(Mock.data);
+            expect(ProfileModel.prototype.save).toBeCalled()
             expect(ResponseService.success).toHaveBeenCalledTimes(1);
             done()
         } catch (err) {
@@ -44,18 +44,18 @@ describe('PerfilService.js Tests', function () {
         jest.setTimeout(30000);
         try {
             jest.spyOn(ResponseService, 'internalServerError');
-            jest.spyOn(PerfilModel.prototype, "save").mockImplementation(() => {
+            jest.spyOn(ProfileModel.prototype, "save").mockImplementation(() => {
                 throw new Error('test error')
                 done();
             });
-            let result = await PerfilService.create(null);
+            let result = await ProfileService.create(null);
             expect(result).toEqual({
                 "body": {
                     "data": new Error('test error')
                 },
                 "code": 500
             });
-            expect(PerfilModel.prototype.save).toBeCalled()
+            expect(ProfileModel.prototype.save).toBeCalled()
             expect(ResponseService.internalServerError).toHaveBeenCalledTimes(1);
             done()
         } catch (err) {
@@ -67,14 +67,14 @@ describe('PerfilService.js Tests', function () {
         jest.setTimeout(30000);
         mock();
         try {
-            jest.spyOn(PerfilModel, "updateOne").mockImplementation(() => {
+            jest.spyOn(ProfileModel, "updateOne").mockImplementation(() => {
                 return Promise.resolve(Mock.data);
                 done();
             });
             jest.spyOn(ResponseService, 'success');
 
-            let result = await PerfilService.update(Mock.data);
-            expect(PerfilModel.updateOne).toBeCalled()
+            let result = await ProfileService.update(Mock.data);
+            expect(ProfileModel.updateOne).toBeCalled()
             expect(ResponseService.success).toHaveBeenCalledTimes(1);
             done()
         } catch (err) {
@@ -86,18 +86,18 @@ describe('PerfilService.js Tests', function () {
         jest.setTimeout(30000);
         try {
             jest.spyOn(ResponseService, 'internalServerError');
-            jest.spyOn(PerfilModel, "updateOne").mockImplementation(() => {
+            jest.spyOn(ProfileModel, "updateOne").mockImplementation(() => {
                 throw new Error('test error')
                 done();
             });
-            let result = await PerfilService.update(null);
+            let result = await ProfileService.update(null);
             expect(result).toEqual({
                 "body": {
                     "data": new Error('test error')
                 },
                 "code": 500
             });
-            expect(PerfilModel.updateOne).toBeCalled()
+            expect(ProfileModel.updateOne).toBeCalled()
             expect(ResponseService.internalServerError).toHaveBeenCalledTimes(1);
             done()
         } catch (err) {

@@ -152,6 +152,8 @@ describe('AccountController.js Tests', function () {
         Mock.result = {
             "email": "teste@gmail.com",
             "password": "123",
+            "active": true,
+            "is_blocked": false,
             "secret": "teste",
             "_id": "5e17cab5b613222e9d19a76e"
         };

@@ -7,14 +7,14 @@ module.exports = function (app) {
     return {
         async create(data) {
             try {
-                const accountFound = await this.getAccount(data.email);
+                const accountFound = await this.getAccount({email: data.email});
                 if (accountFound) {
                     return Response.notAcceptable();
                 } else {
                     let account = new accountModel(data);
 
                     await account.save();
-                    return Response.success(account._id);
+                    return account.toBSON();
                 }
             } catch (err) {
                 return Response.internalServerError(err);
@@ -33,15 +33,39 @@ module.exports = function (app) {
                 return Response.internalServerError(err);
             }
         },
-        async getAccount(email , full = 0) {
+        async getAccount(filter) {
             try {
-                const project = full ? {} : {password: 0}
-                let result = await accountModel.findOne({email}, project);
+                let result = await accountModel.findOne(filter);
                 if (result) {
                     return result.toBSON();
                 } else {
                     return null;
                 }
+            } catch (err) {
+                return Response.internalServerError(err);
+            }
+        },
+        async disable(email){
+          try {
+              let result = await accountModel.updateOne({email}, {active: false});
+              if (result){
+                  return Response.success(result);
+              } else {
+                  return Response.notAcceptable(result)
+              }
+          } catch (err) {
+              return Response.internalServerError(err);
+          }
+        },
+        async deleteAccount(_id) {
+            try {
+                await accountModel.deleteOne({_id}, function (err) {
+                    if (err) {
+                        return false;
+                    } else {
+                        return true;
+                    }
+                });
             } catch (err) {
                 return Response.internalServerError(err);
             }
