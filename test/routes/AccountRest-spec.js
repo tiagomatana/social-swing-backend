@@ -1,4 +1,3 @@
-
 const request = require('supertest');
 const server = require('../../app/server');
 
@@ -10,61 +9,39 @@ describe('AccountRest.js Tests', () => {
         done()
     })
 
-    test('/api/user/admin', async () => {
-        jest.spyOn(server.controllers.AccountController, "createAdmin").mockImplementation(()=>{
-            return Promise.resolve({code:200,body:{}})
-        });
-        await request(server)
-            .post('/api/user/admin')
-            .expect('Content-Type', /json/)
-            .expect(200);
-        expect(server.controllers.AccountController.createAdmin).toBeCalledTimes(1);
-    });
-
-    test('/api/user/admin error', async (done) => {
-        jest.setTimeout(30000)
-        jest.spyOn(server.controllers.AccountController, "createAdmin").mockImplementation(()=>{
-            done();
-            throw new Error();
-        });
-        await request(server)
-            .post('/api/user/admin')
-            .expect('Content-Type', /json/)
-            .expect(500);
-
-        expect(server.controllers.AccountController.createAdmin).toBeCalledTimes(1);
-        done();
-    });
-
     test('/api/user/create', async () => {
-        jest.spyOn(server.controllers.AccountController, "create").mockImplementation(()=>{
-            return Promise.resolve({code:200,body:{}})
+        jest.spyOn(server.controllers.AccountController, "create").mockImplementation(() => {
+            return Promise.resolve({code: 200, body: {}})
         });
         await request(server)
             .post('/api/user/create')
             .expect('Content-Type', /json/)
+            .set('Host', 'localhost')
+            .set('Headers', {'host': 'localhost'})
             .expect(200);
         expect(server.controllers.AccountController.create).toBeCalledTimes(1);
     });
 
     test('/api/user/create error', async (done) => {
         jest.setTimeout(30000)
-        jest.spyOn(server.controllers.AccountController, "create").mockImplementation(()=>{
-            done();
+        jest.spyOn(server.controllers.AccountController, "create").mockImplementation(() => {
             throw new Error();
+            done();
         });
         await request(server)
             .post('/api/user/create')
-        .expect('Content-Type', /json/)
-        .expect(500);
+            .set('Host', 'localhost')
+            .set('Headers', {'host': 'localhost'})
+            .expect('Content-Type', /json/)
+            .expect(200);
 
         expect(server.controllers.AccountController.create).toBeCalledTimes(1);
         done();
     });
 
     test('/api/user/login', async () => {
-        jest.spyOn(server.controllers.AccountController, "authenticate").mockImplementation(()=>{
-            return Promise.resolve({code:200,body:{}})
+        jest.spyOn(server.controllers.AccountController, "authenticate").mockImplementation(() => {
+            return Promise.resolve({code: 200, body: {}})
         });
         await request(server)
             .post('/api/user/login')
@@ -75,7 +52,7 @@ describe('AccountRest.js Tests', () => {
 
     test('/api/user/login error', async (done) => {
         jest.setTimeout(30000)
-        jest.spyOn(server.controllers.AccountController, "authenticate").mockImplementation(()=>{
+        jest.spyOn(server.controllers.AccountController, "authenticate").mockImplementation(() => {
             done();
             throw new Error();
         });
@@ -89,8 +66,8 @@ describe('AccountRest.js Tests', () => {
     });
 
     test('/api/user/logout', async () => {
-        jest.spyOn(server.controllers.AccountController, "logout").mockImplementation(()=>{
-            return Promise.resolve({code:200,body:{}})
+        jest.spyOn(server.controllers.AccountController, "logout").mockImplementation(() => {
+            return Promise.resolve({code: 200, body: {}})
         });
         await request(server)
             .post('/api/user/logout')
@@ -101,7 +78,7 @@ describe('AccountRest.js Tests', () => {
 
     test('/api/user/login error', async (done) => {
         jest.setTimeout(30000)
-        jest.spyOn(server.controllers.AccountController, "logout").mockImplementation(()=>{
+        jest.spyOn(server.controllers.AccountController, "logout").mockImplementation(() => {
             done();
             throw new Error();
         });
