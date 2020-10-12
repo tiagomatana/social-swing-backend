@@ -27,7 +27,7 @@ module.exports = function (app) {
     const salt = bcrypt.genSaltSync(10);
 
     return {
-        async create(user, host) {
+        async create(user) {
 
             if (!Email.validate(user.email)) {
                 return Response.notAcceptable();
@@ -38,7 +38,7 @@ module.exports = function (app) {
             let token = jwt.sign({_id}, process.env.SECRET, {
                 expiresIn: 43200 // expires in 12 hours
             });
-            let link = host + "/api/user/validate/" + token;
+            let link = "https://social-swing-backend.herokuapp.com/api/user/validate/" + token;
             const data = {
                 email: result.email,
                 subject: '[ATIVAR CONTA]',

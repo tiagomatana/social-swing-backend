@@ -30,7 +30,7 @@ module.exports = function (app) {
         next();
     });
 
-    app.get('/', security.verifyJWT, async function (req, res) {
+    app.get('/api', security.verifyJWT, async function (req, res) {
         let result = Response.success(req.user._id);
         res.status(result.code).send(result.body);
     });
@@ -69,18 +69,9 @@ module.exports = function (app) {
         }
     })
 
-    // app.post(`${PREFIX_URL}/admin`, async function (req, res) {
-    //     try {
-    //         let result = await ctrl.createAdmin(req.body);
-    //         res.status(result.code).send(result.body);
-    //     } catch (err) {
-    //         res.send(app.interfaces.Response.internalServerError())
-    //     }
-    // });
-
     app.post(`${PREFIX_URL}/create`, async function (req, res) {
         try {
-            let result = await ctrl.create(req.body, req.headers.host || null);
+            let result = await ctrl.create(req.body);
             res.status(result.code).send(result.body);
         } catch (err) {
             res.send(app.interfaces.Response.internalServerError())
